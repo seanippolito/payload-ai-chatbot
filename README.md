@@ -27,6 +27,12 @@
 - [shadcn/ui](https://ui.shadcn.com)
   - Styling with [Tailwind CSS](https://tailwindcss.com)
   - Component primitives from [Radix UI](https://radix-ui.com) for accessibility and flexibility
+- [Payload CMS](https://payloadcms.com)
+  - Headless CMS with powerful admin interface
+  - Built-in authentication and role-based access control
+  - REST and GraphQL APIs
+  - TypeScript support and custom field types
+  - File uploads and media management
 - Data Persistence
   - [Vercel Postgres powered by Neon](https://vercel.com/storage/postgres) for saving chat history and user data
   - [Vercel Blob](https://vercel.com/storage/blob) for efficient file storage

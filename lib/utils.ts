@@ -1,16 +1,8 @@
-import type {
-  CoreAssistantMessage,
-  CoreToolMessage,
-  Message,
-  TextStreamPart,
-  ToolInvocation,
-  ToolSet,
-  UIMessage,
-} from 'ai';
+import type { CoreAssistantMessage, CoreToolMessage, UIMessage } from 'ai';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-
-import type { DBMessage, Document } from '@/lib/db/schema';
+import { ObjectId } from 'bson';
+import type { ChatDocument } from '@/payload/payload-types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -53,37 +45,8 @@ export function generateUUID(): string {
   });
 }
 
-function addToolMessageToChat({
-  toolMessage,
-  messages,
-}: {
-  toolMessage: CoreToolMessage;
-  messages: Array<Message>;
-}): Array<Message> {
-  return messages.map((message) => {
-    if (message.toolInvocations) {
-      return {
-        ...message,
-        toolInvocations: message.toolInvocations.map((toolInvocation) => {
-          const toolResult = toolMessage.content.find(
-            (tool) => tool.toolCallId === toolInvocation.toolCallId,
-          );
-
-          if (toolResult) {
-            return {
-              ...toolInvocation,
-              state: 'result',
-              result: toolResult.result,
-            };
-          }
-
-          return toolInvocation;
-        }),
-      };
-    }
-
-    return message;
-  });
+export function generateChatId(): string {
+  return new ObjectId().toString();
 }
 
 type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage;
@@ -143,7 +106,7 @@ export function getMostRecentUserMessage(messages: Array<UIMessage>) {
 }
 
 export function getDocumentTimestampByIndex(
-  documents: Array<Document>,
+  documents: Array<Omit<ChatDocument, 'id' | 'updatedAt'>>,
   index: number,
 ) {
   if (!documents) return new Date();

@@ -4,9 +4,9 @@ import { sheetDocumentHandler } from '@/artifacts/sheet/server';
 import { textDocumentHandler } from '@/artifacts/text/server';
 import { ArtifactKind } from '@/components/artifact';
 import { DataStreamWriter } from 'ai';
-import { Document } from '../db/schema';
-import { saveDocument } from '../db/queries';
+import { saveDocument } from '@/lib/db/queries';
 import { Session } from 'next-auth';
+import { ChatDocument } from '@/payload/payload-types';
 
 export interface SaveDocumentProps {
   id: string;
@@ -24,7 +24,7 @@ export interface CreateDocumentCallbackProps {
 }
 
 export interface UpdateDocumentCallbackProps {
-  document: Document;
+  document: ChatDocument;
   description: string;
   dataStream: DataStreamWriter;
   session: Session;
@@ -73,7 +73,7 @@ export function createDocumentHandler<T extends ArtifactKind>(config: {
 
       if (args.session?.user?.id) {
         await saveDocument({
-          id: args.document.id,
+          id: args.document.documentId,
           title: args.document.title,
           content: draftContent,
           kind: config.kind,

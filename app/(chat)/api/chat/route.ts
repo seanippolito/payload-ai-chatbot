@@ -14,7 +14,7 @@ import {
   saveMessages,
 } from '@/lib/db/queries';
 import {
-  generateUUID,
+  generateChatId,
   getMostRecentUserMessage,
   getTrailingMessageId,
 } from '@/lib/utils';
@@ -70,11 +70,10 @@ export async function POST(request: Request) {
       messages: [
         {
           chatId: id,
-          id: userMessage.id,
           role: 'user',
           parts: userMessage.parts,
           attachments: userMessage.experimental_attachments ?? [],
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
         },
       ],
     });
@@ -96,7 +95,7 @@ export async function POST(request: Request) {
                   'requestSuggestions',
                 ],
           experimental_transform: smoothStream({ chunking: 'word' }),
-          experimental_generateMessageId: generateUUID,
+          experimental_generateMessageId: generateChatId,
           tools: {
             getWeather,
             createDocument: createDocument({ session, dataStream }),
@@ -130,10 +129,10 @@ export async function POST(request: Request) {
                       id: assistantId,
                       chatId: id,
                       role: assistantMessage.role,
-                      parts: assistantMessage.parts,
+                      parts: assistantMessage.parts ?? [],
                       attachments:
                         assistantMessage.experimental_attachments ?? [],
-                      createdAt: new Date(),
+                      createdAt: new Date().toISOString(),
                     },
                   ],
                 });
@@ -159,6 +158,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
+    console.error(error);
     return new Response('An error occurred while processing your request!', {
       status: 404,
     });
@@ -182,7 +182,7 @@ export async function DELETE(request: Request) {
   try {
     const chat = await getChatById({ id });
 
-    if (chat.userId !== session.user.id) {
+    if (chat?.userId !== session.user.id) {
       return new Response('Unauthorized', { status: 401 });
     }
 

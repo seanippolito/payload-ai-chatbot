@@ -12,6 +12,11 @@ import {
   reasoningModel,
   titleModel,
 } from './models.test';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 
 export const myProvider = isTestEnvironment
   ? customProvider({
@@ -24,12 +29,16 @@ export const myProvider = isTestEnvironment
     })
   : customProvider({
       languageModels: {
-        'chat-model': xai('grok-2-1212'),
+        'chat-model': openrouter.languageModel(
+          'google/gemini-2.0-flash-lite-preview-02-05:free',
+        ),
         'chat-model-reasoning': wrapLanguageModel({
           model: groq('deepseek-r1-distill-llama-70b'),
           middleware: extractReasoningMiddleware({ tagName: 'think' }),
         }),
-        'title-model': xai('grok-2-1212'),
+        'title-model': openrouter.languageModel(
+          'google/gemini-2.0-flash-lite-preview-02-05:free',
+        ),
         'artifact-model': xai('grok-2-1212'),
       },
       imageModels: {

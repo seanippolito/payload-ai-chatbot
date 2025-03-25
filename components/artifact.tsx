@@ -11,7 +11,7 @@ import {
 } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { useDebounceCallback, useWindowSize } from 'usehooks-ts';
-import type { Document, Vote } from '@/lib/db/schema';
+import type { ChatDocument, ChatVote } from '@/payload/payload-types';
 import { fetcher } from '@/lib/utils';
 import { MultimodalInput } from './multimodal-input';
 import { Toolbar } from './toolbar';
@@ -76,7 +76,7 @@ function PureArtifact({
   setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
   messages: Array<UIMessage>;
   setMessages: UseChatHelpers['setMessages'];
-  votes: Array<Vote> | undefined;
+  votes: Array<ChatVote> | undefined;
   append: UseChatHelpers['append'];
   handleSubmit: UseChatHelpers['handleSubmit'];
   reload: UseChatHelpers['reload'];
@@ -88,7 +88,7 @@ function PureArtifact({
     data: documents,
     isLoading: isDocumentsFetching,
     mutate: mutateDocuments,
-  } = useSWR<Array<Document>>(
+  } = useSWR<Array<ChatDocument>>(
     artifact.documentId !== 'init' && artifact.status !== 'streaming'
       ? `/api/document?id=${artifact.documentId}`
       : null,
@@ -96,7 +96,7 @@ function PureArtifact({
   );
 
   const [mode, setMode] = useState<'edit' | 'diff'>('edit');
-  const [document, setDocument] = useState<Document | null>(null);
+  const [document, setDocument] = useState<ChatDocument | null>(null);
   const [currentVersionIndex, setCurrentVersionIndex] = useState(-1);
 
   const { open: isSidebarOpen } = useSidebar();
@@ -127,7 +127,7 @@ function PureArtifact({
     (updatedContent: string) => {
       if (!artifact) return;
 
-      mutate<Array<Document>>(
+      mutate<Array<ChatDocument>>(
         `/api/document?id=${artifact.documentId}`,
         async (currentDocuments) => {
           if (!currentDocuments) return undefined;
@@ -154,7 +154,7 @@ function PureArtifact({
             const newDocument = {
               ...currentDocument,
               content: updatedContent,
-              createdAt: new Date(),
+              createdAt: new Date().toISOString(),
             };
 
             return [...currentDocuments, newDocument];

@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { useEffect, useRef } from 'react';
 import { artifactDefinitions, ArtifactKind } from './artifact';
-import { Suggestion } from '@/lib/db/schema';
+import { ChatSuggestion } from '@/payload/payload-types';
 import { initialArtifactData, useArtifact } from '@/hooks/use-artifact';
 
 export type DataStreamDelta = {
@@ -18,7 +18,7 @@ export type DataStreamDelta = {
     | 'clear'
     | 'finish'
     | 'kind';
-  content: string | Suggestion;
+  content: string | ChatSuggestion;
 };
 
 export function DataStreamHandler({ id }: { id: string }) {

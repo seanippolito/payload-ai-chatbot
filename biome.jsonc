@@ -51,6 +51,7 @@
         "useKeyWithClickEvents": "off" // Disable keyboard event requirement with click events
       },
       "complexity": {
+        "noBannedTypes": "off",
         "noUselessStringConcat": "warn", // Not in recommended ruleset, turning on manually
         "noForEach": "off", // forEach is too familiar to ban
         "noUselessSwitchCase": "off", // Turned off due to developer preferences
@@ -68,6 +69,8 @@
         "noDangerouslySetInnerHtml": "off" // Covered by Conformance
       },
       "style": {
+        "useNodejsImportProtocol": "off",
+        "useImportType": "off",
         "useFragmentSyntax": "warn", // Not in recommended ruleset, turning on manually
         "noYodaExpression": "warn", // Not in recommended ruleset, turning on manually
         "useDefaultParameterLast": "warn", // Not in recommended ruleset, turning on manually

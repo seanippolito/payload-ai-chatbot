@@ -5,8 +5,8 @@ import { useChat } from '@ai-sdk/react';
 import { useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { ChatHeader } from '@/components/chat-header';
-import type { Vote } from '@/lib/db/schema';
-import { fetcher, generateUUID } from '@/lib/utils';
+import type { ChatVote } from '@/payload/payload-types';
+import { fetcher, generateChatId } from '@/lib/utils';
 import { Artifact } from './artifact';
 import { MultimodalInput } from './multimodal-input';
 import { Messages } from './messages';
@@ -45,7 +45,7 @@ export function Chat({
     initialMessages,
     experimental_throttle: 100,
     sendExtraMessageFields: true,
-    generateId: generateUUID,
+    generateId: generateChatId,
     onFinish: () => {
       mutate('/api/history');
     },
@@ -54,7 +54,7 @@ export function Chat({
     },
   });
 
-  const { data: votes } = useSWR<Array<Vote>>(
+  const { data: votes } = useSWR<Array<ChatVote>>(
     messages.length >= 2 ? `/api/vote?chatId=${id}` : null,
     fetcher,
   );

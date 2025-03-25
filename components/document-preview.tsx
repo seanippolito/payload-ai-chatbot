@@ -11,7 +11,7 @@ import {
 import { ArtifactKind, UIArtifact } from './artifact';
 import { FileIcon, FullscreenIcon, ImageIcon, LoaderIcon } from './icons';
 import { cn, fetcher } from '@/lib/utils';
-import { Document } from '@/lib/db/schema';
+import { ChatDocument } from '@/payload/payload-types';
 import { InlineDocumentSkeleton } from './document-skeleton';
 import useSWR from 'swr';
 import { Editor } from './text-editor';
@@ -36,7 +36,7 @@ export function DocumentPreview({
   const { artifact, setArtifact } = useArtifact();
 
   const { data: documents, isLoading: isDocumentsFetching } = useSWR<
-    Array<Document>
+    Array<ChatDocument>
   >(result ? `/api/document?id=${result.id}` : null, fetcher);
 
   const previewDocument = useMemo(() => documents?.[0], [documents]);
@@ -84,15 +84,16 @@ export function DocumentPreview({
     return <LoadingSkeleton artifactKind={result.kind ?? args.kind} />;
   }
 
-  const document: Document | null = previewDocument
+  const document: Omit<ChatDocument, 'id'> | null = previewDocument
     ? previewDocument
     : artifact.status === 'streaming'
       ? {
           title: artifact.title,
           kind: artifact.kind,
           content: artifact.content,
-          id: artifact.documentId,
-          createdAt: new Date(),
+          documentId: artifact.documentId,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
           userId: 'noop',
         }
       : null;
@@ -234,7 +235,9 @@ const DocumentHeader = memo(PureDocumentHeader, (prevProps, nextProps) => {
   return true;
 });
 
-const DocumentContent = ({ document }: { document: Document }) => {
+const DocumentContent = ({
+  document,
+}: { document: Omit<ChatDocument, 'id'> }) => {
   const { artifact } = useArtifact();
 
   const containerClassName = cn(

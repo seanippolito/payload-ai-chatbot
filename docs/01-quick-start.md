@@ -10,8 +10,53 @@ Deploying to [Vercel](https://vercel.com) is the quickest way to get started wit
 - GitHub/GitLab/Bitbucket account
 - API Keys from three AI model providers:
   - [xAI](https://console.x.ai/)
+  - [Open Router](https://openrouter.ai/settings/keys)
   - [OpenAI](https://platform.openai.com/account/api-keys)
   - [Fireworks](https://fireworks.ai/account/api-keys)
+
+### About Payload CMS
+
+This project uses [Payload CMS](https://payloadcms.com) as its headless content management system. Payload CMS provides:
+
+- A powerful admin interface for managing content
+- Built-in authentication and authorization
+- REST and GraphQL APIs
+- TypeScript support
+- Custom field types and validation
+- File uploads and media management
+- Role-based access control
+
+The CMS is configured to work seamlessly with the chatbot template, allowing you to:
+
+- Manage chat history and conversations
+- Configure AI model settings
+- Store and manage user data
+- Customize the chatbot's behavior and appearance
+
+#### Accessing the Admin Interface
+
+The Payload CMS admin interface is available at `/admin` after deployment. You can access it by:
+
+1. Visiting your deployed site
+2. Adding `/admin` to the URL
+3. Logging in with your admin credentials
+
+#### Key Features
+
+- **Content Management**: Create and manage content types for your chatbot
+- **User Management**: Handle user roles and permissions
+- **Media Library**: Upload and manage files and images
+- **API Access**: Use REST or GraphQL APIs to interact with your content
+- **Custom Fields**: Define custom field types for specific needs
+- **Access Control**: Set up role-based permissions for different user types
+
+#### Environment Variables
+
+Make sure to set up the following environment variables for Payload CMS:
+
+```env
+PAYLOAD_SECRET=your-secret-key
+```
 
 ### Deploy to Vercel
 

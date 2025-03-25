@@ -1,6 +1,6 @@
 import { PreviewMessage } from './message';
 import { useScrollToBottom } from './use-scroll-to-bottom';
-import { Vote } from '@/lib/db/schema';
+import { ChatVote } from '@/payload/payload-types';
 import { UIMessage } from 'ai';
 import { memo } from 'react';
 import equal from 'fast-deep-equal';
@@ -10,7 +10,7 @@ import { UseChatHelpers } from '@ai-sdk/react';
 interface ArtifactMessagesProps {
   chatId: string;
   status: UseChatHelpers['status'];
-  votes: Array<Vote> | undefined;
+  votes: Array<ChatVote> | undefined;
   messages: Array<UIMessage>;
   setMessages: UseChatHelpers['setMessages'];
   reload: UseChatHelpers['reload'];

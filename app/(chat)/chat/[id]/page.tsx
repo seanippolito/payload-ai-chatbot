@@ -6,7 +6,7 @@ import { Chat } from '@/components/chat';
 import { getChatById, getMessagesByChatId } from '@/lib/db/queries';
 import { DataStreamHandler } from '@/components/data-stream-handler';
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/models';
-import { DBMessage } from '@/lib/db/schema';
+import { ChatMessage } from '@/payload/payload-types';
 import { Attachment, UIMessage } from 'ai';
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -34,14 +34,14 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     id,
   });
 
-  function convertToUIMessages(messages: Array<DBMessage>): Array<UIMessage> {
+  function convertToUIMessages(messages: Array<ChatMessage>): Array<UIMessage> {
     return messages.map((message) => ({
       id: message.id,
       parts: message.parts as UIMessage['parts'],
       role: message.role as UIMessage['role'],
       // Note: content will soon be deprecated in @ai-sdk/react
       content: '',
-      createdAt: message.createdAt,
+      createdAt: new Date(message.createdAt),
       experimental_attachments:
         (message.attachments as Array<Attachment>) ?? [],
     }));
@@ -57,7 +57,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           id={chat.id}
           initialMessages={convertToUIMessages(messagesFromDb)}
           selectedChatModel={DEFAULT_CHAT_MODEL}
-          selectedVisibilityType={chat.visibility}
+          selectedVisibilityType={chat.visibility ?? 'private'}
           isReadonly={session?.user?.id !== chat.userId}
         />
         <DataStreamHandler id={id} />
@@ -71,7 +71,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         id={chat.id}
         initialMessages={convertToUIMessages(messagesFromDb)}
         selectedChatModel={chatModelFromCookie.value}
-        selectedVisibilityType={chat.visibility}
+        selectedVisibilityType={chat.visibility ?? 'private'}
         isReadonly={session?.user?.id !== chat.userId}
       />
       <DataStreamHandler id={id} />

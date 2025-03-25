@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { Session } from 'next-auth';
 import { DataStreamWriter, streamObject, tool } from 'ai';
 import { getDocumentById, saveSuggestions } from '@/lib/db/queries';
-import { Suggestion } from '@/lib/db/schema';
-import { generateUUID } from '@/lib/utils';
+import { ChatSuggestion } from '@/payload/payload-types';
+import { generateChatId } from '@/lib/utils';
 import { myProvider } from '../providers';
 
 interface RequestSuggestionsProps {
@@ -32,7 +32,7 @@ export const requestSuggestions = ({
       }
 
       const suggestions: Array<
-        Omit<Suggestion, 'userId' | 'createdAt' | 'documentCreatedAt'>
+        Omit<ChatSuggestion, 'userId' | 'createdAt' | 'updatedAt'>
       > = [];
 
       const { elementStream } = streamObject({
@@ -53,7 +53,7 @@ export const requestSuggestions = ({
           originalText: element.originalSentence,
           suggestedText: element.suggestedSentence,
           description: element.description,
-          id: generateUUID(),
+          id: generateChatId(),
           documentId: documentId,
           isResolved: false,
         };
@@ -73,7 +73,7 @@ export const requestSuggestions = ({
           suggestions: suggestions.map((suggestion) => ({
             ...suggestion,
             userId,
-            createdAt: new Date(),
+            createdAt: new Date().toISOString(),
             documentCreatedAt: document.createdAt,
           })),
         });

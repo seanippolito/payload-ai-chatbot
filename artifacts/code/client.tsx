@@ -9,7 +9,7 @@ import {
   UndoIcon,
 } from '@/components/icons';
 import { toast } from 'sonner';
-import { generateUUID } from '@/lib/utils';
+import { generateChatId } from '@/lib/utils';
 import {
   Console,
   ConsoleOutput,
@@ -117,7 +117,7 @@ export const codeArtifact = new Artifact<'code', Metadata>({
       label: 'Run',
       description: 'Execute code',
       onClick: async ({ content, setMetadata }) => {
-        const runId = generateUUID();
+        const runId = generateChatId();
         const outputContent: Array<ConsoleOutputContent> = [];
 
         setMetadata((metadata) => ({
