@@ -30,14 +30,14 @@ export const myProvider = isTestEnvironment
   : customProvider({
       languageModels: {
         'chat-model': openrouter.languageModel(
-          'google/gemini-2.0-flash-lite-preview-02-05:free',
+          'google/gemini-2.5-pro-preview-03-25',
         ),
         'chat-model-reasoning': wrapLanguageModel({
           model: groq('deepseek-r1-distill-llama-70b'),
           middleware: extractReasoningMiddleware({ tagName: 'think' }),
         }),
         'title-model': openrouter.languageModel(
-          'google/gemini-2.0-flash-lite-preview-02-05:free',
+          'google/gemini-2.5-pro-preview-03-25',
         ),
         'artifact-model': xai('grok-2-1212'),
       },
