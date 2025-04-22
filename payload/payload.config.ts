@@ -35,12 +35,12 @@ export default buildConfig({
   // Whichever Database Adapter you're using should go here
   // Mongoose is shown as an example, but you can also use Postgres
   db: mongooseAdapter({
-    url: process.env.DATABASE_URL || '',
+    url: process.env.MONGODB_URI || '',
     allowIDOnCreate: true, // Allow ID to be set on create
   }),
   // db: postgresAdapter({
   //   pool: {
-  //     connectionString: process.env.DATABASE_URL || '',
+  //     connectionString: process.env.MONGODB_URI || '',
   //   },
   //   idType: 'uuid',
   //   allowIDOnCreate: true, // Allow ID to be set on create
