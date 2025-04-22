@@ -10,7 +10,7 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
-      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      NEXT_PUBLIC_SECRET: ${{ secrets.NEXT_PUBLIC_SECRET }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       BLOB_READ_WRITE_TOKEN_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN_READ_WRITE_TOKEN }}
 
